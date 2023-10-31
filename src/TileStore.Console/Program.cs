@@ -6,13 +6,14 @@
 
 using TileStore;
 
+
 // Константа для ограничения максимального количество попыток авторизации.
 const int MaxAuthorizeTries = 3;
 
-// Счетчик попыток, которые сделал пользователь.
+// Счетчик попыток авторизации, которые сделал пользователь.
 var authorizeTryCount = 0;
 
-// Заполняем базу данных стран.
+// Заполняем "базу данных" стран.
 var countryList = new List<Country>()
 {
     new Country("Россия", "001", 1.0f),
@@ -21,7 +22,9 @@ var countryList = new List<Country>()
     new Country("Армения", "004A", 1.3f)
 };
 
-// Заполняем словарь кодов стран.
+// Заполняем словарь замены суффиксов в кодах стран с некорректынх на корректные.
+// Ключ - Некорректный суффикс.
+// Значение - Корректный.
 var countryCodes = new Dictionary<string, string>
     {
         { "К",     "K" } ,
@@ -44,11 +47,12 @@ while (true)
     Console.WriteLine("Введите пароль пользователя:");
     var userPassword = Console.ReadLine();
 
+    // Пробуем авторизовать пользователя.
     var userIsAuthorized = userAuthentificator.Authorize(userName, userPassword);
 
     if (userIsAuthorized)
     {
-        Console.WriteLine($"Успешная авторизация! Добро пожаловать: {userName}");
+        Console.WriteLine($"Успешная авторизация! Добро пожаловать: {userName}!");
 
         break;
     }
@@ -58,14 +62,12 @@ while (true)
 
         if (authorizeTryCount >= MaxAuthorizeTries)
         {
-            throw new Exception("Максимальное количество попыток исчерпано");
+            throw new Exception("Максимальное количество попыток исчерпано.");
         }
     }
 }
 
 #endregion
-
-Console.WriteLine("Далее мы авторизованный пользователь");
 
 Console.WriteLine("Введите код страны, из списка ниже:");
 
@@ -75,11 +77,10 @@ Console.WriteLine("=================================\n" +
                   "Казахстан: 003K || Армения:  004A\n" +
                   "================================= ");
 
+// Ожидаем, пока пользователь введет корректный код страны.
 while (true)
 {
     var userCountryCode = Console.ReadLine();
-
-    #region Обрабатываем некорретные коды стран
 
     if (userCountryCode.Length == 4)
     {
@@ -110,12 +111,9 @@ while (true)
     }
     else
     {
-        Console.WriteLine("Код страны успешно найден, продолжаем");
         break;
     }
 }
-
-#endregion
 
 Console.WriteLine("Нажмите любую клавишу, чтобы продолжить...");
 Console.ReadKey();

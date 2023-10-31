@@ -17,7 +17,7 @@ public class UserAuthentificator
 
         if( passwordFromDictionary == null) 
         {
-            Console.WriteLine($"Не нашли в словаре пользователя: {username}");
+            Console.WriteLine($"Пользователь {username} не найден в базе данных!");
         }
 
         return passwordFromDictionary == userPassword; 
